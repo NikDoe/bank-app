@@ -18,5 +18,5 @@ export type TAction =
 { type: ActionType.DEPOSIT; payload: number; } |
 { type: ActionType.WITHDRAW; payload: number; } |
 { type: ActionType.REQUESTLOAN; payload: number; } |
-{ type: ActionType.PAYLOAN; payload: number; } |
+{ type: ActionType.PAYLOAN; } |
 { type: ActionType.CLOSEACCOUNT;  }

@@ -58,8 +58,7 @@ function Main(props: MainProps) {
 
 	function handlePayLoan () {
 		const action: TAction = {
-			type: ActionType.PAYLOAN,
-			payload: LOAN_VALUE
+			type: ActionType.PAYLOAN
 		};
 
 		dispatch(action);
