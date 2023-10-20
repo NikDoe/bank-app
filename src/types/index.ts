@@ -40,3 +40,31 @@ TAccountDepositAction |
 TAccountWithdrawAction |
 TAccountRequestLoanAction |
 TAccountPayLoanAction
+
+//CUSTOMERS TYPES
+export type TCustomerState = {
+    fullName: string;
+    nationalID: number;
+}
+
+export enum CustomerActionType {
+    CREATE = 'customer/createCustomer',
+    UPDATE = 'customer/updateCustomer',
+}
+
+type TCreateCustomerObject = {
+    fullName: string;
+    nationalID: number;
+};
+
+export type TCreateCustomerAction = { 
+    type: CustomerActionType.CREATE; 
+    payload: TCreateCustomerObject; 
+}
+
+export type TUpdateCustomerAction = { 
+    type: CustomerActionType.UPDATE; 
+    payload: string; 
+}
+
+export type TCustomerActions = TCreateCustomerAction | TUpdateCustomerAction
