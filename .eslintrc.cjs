@@ -16,6 +16,14 @@ module.exports = {
     ],
     'indent': ['error', 'tab', { SwitchCase: 1}],
     'object-curly-spacing': ['error', 'always'],
-    "semi": ["error", "always"],
+    'semi': ['error', 'always'],
+    'quotes': ['error', 'single'],
+    'jsx-quotes': ['error', 'prefer-single'],
+    "max-len": ["error", { 
+      "code": 80, 
+      "ignoreComments": true,
+      "ignoreUrls": true,
+      "tabWidth": 2
+    }]
   },
 }

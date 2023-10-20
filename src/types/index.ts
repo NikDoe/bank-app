@@ -1,22 +1,42 @@
-export type TState = {
+export type TAccountState = {
     balance: number;
     loan: number;
-    isOpen: boolean;
+    loanPurpose: string;
 }
 
-export enum ActionType {
-    OPENACCOUNT = 'openAccount',
-    DEPOSIT = 'deposit',
-    WITHDRAW = 'withdraw',
-    REQUESTLOAN = 'requestLoan',
-    PAYLOAN = 'payLoan',
-    CLOSEACCOUNT = 'closeAccount',
+export enum AccountActionType {
+    DEPOSIT = 'accounts/deposit',
+    WITHDRAW = 'accounts/withdraw',
+    REQUEST_LOAN = 'accounts/requestLoan',
+    PAY_LOAN = 'accounts/payLoan',
 }
 
-export type TAction = 
-{ type: ActionType.OPENACCOUNT; payload: number; } |
-{ type: ActionType.DEPOSIT; payload: number; } |
-{ type: ActionType.WITHDRAW; payload: number; } |
-{ type: ActionType.REQUESTLOAN; payload: number; } |
-{ type: ActionType.PAYLOAN; } |
-{ type: ActionType.CLOSEACCOUNT;  }
+type TRequestLoanObject = {
+    ammount: number,
+    loanPurpose: string,
+};
+
+export type TAccountDepositAction = { 
+    type: AccountActionType.DEPOSIT; 
+    payload: number 
+}
+
+export type TAccountWithdrawAction = { 
+    type: AccountActionType.WITHDRAW; 
+    payload: number 
+}
+
+export type TAccountRequestLoanAction = { 
+    type: AccountActionType.REQUEST_LOAN; 
+    payload: TRequestLoanObject 
+}
+
+export type TAccountPayLoanAction = { 
+    type: AccountActionType.PAY_LOAN; 
+}
+
+export type TAccountActions = 
+TAccountDepositAction |
+TAccountWithdrawAction |
+TAccountRequestLoanAction |
+TAccountPayLoanAction
