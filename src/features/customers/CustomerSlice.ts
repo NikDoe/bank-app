@@ -8,7 +8,7 @@ import {
 
 const initialCustomerState: TCustomerState = {
 	fullName: '',
-	nationalID: 0
+	nationalID: ''
 };
 
 export default function reducer (
@@ -38,7 +38,7 @@ export default function reducer (
 
 export function createCustomer (
 	fullName: string, 
-	nationalID: number
+	nationalID: string
 ): TCreateCustomerAction {
 	return {
 		type: CustomerActionType.CREATE,

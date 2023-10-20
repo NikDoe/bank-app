@@ -44,7 +44,7 @@ TAccountPayLoanAction
 //CUSTOMERS TYPES
 export type TCustomerState = {
     fullName: string;
-    nationalID: number;
+    nationalID: string;
 }
 
 export enum CustomerActionType {
@@ -52,14 +52,9 @@ export enum CustomerActionType {
     UPDATE = 'customer/updateCustomer',
 }
 
-type TCreateCustomerObject = {
-    fullName: string;
-    nationalID: number;
-};
-
 export type TCreateCustomerAction = { 
     type: CustomerActionType.CREATE; 
-    payload: TCreateCustomerObject; 
+    payload: TCustomerState; 
 }
 
 export type TUpdateCustomerAction = { 
