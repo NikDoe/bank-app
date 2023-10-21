@@ -15,6 +15,7 @@ function AccountOperations() {
 		balance,
 		loan,
 		loanPurpose: purpose,
+		isLoading,
 	} = useSelector(selectAccount);
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -68,7 +69,12 @@ function AccountOperations() {
 						<option value={CurrencyValue.GBP}>British Pound</option>
 					</select>
 
-					<button onClick={handleDeposit}>Deposit {depositAmount}</button>
+					<button 
+						onClick={handleDeposit}
+						disabled={isLoading}
+					>
+						{isLoading ? 'Converting' : `Deposit ${depositAmount}`}
+					</button>
 				</div>
 
 				<div>

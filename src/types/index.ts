@@ -6,6 +6,7 @@ export type TAccountState = {
     balance: number;
     loan: number;
     loanPurpose: string;
+    isLoading: boolean;
 }
 
 export type TCustomerState = {
@@ -39,6 +40,7 @@ export enum AccountActionType {
     WITHDRAW = 'accounts/withdraw',
     REQUEST_LOAN = 'accounts/requestLoan',
     PAY_LOAN = 'accounts/payLoan',
+    CONVERT_CURRENCY = 'accounts/convertCurrency',
 }
 
 type TRequestLoanObject = {
@@ -65,11 +67,16 @@ export type TAccountPayLoanAction = {
     type: AccountActionType.PAY_LOAN; 
 }
 
+export type TAccountConvertingCurrencyAction = {
+    type: AccountActionType.CONVERT_CURRENCY;
+}
+
 export type TAccountActions = 
 TAccountDepositAction |
 TAccountWithdrawAction |
 TAccountRequestLoanAction |
-TAccountPayLoanAction
+TAccountPayLoanAction | 
+TAccountConvertingCurrencyAction
 
 //CUSTOMERS TYPES
 export enum CustomerActionType {

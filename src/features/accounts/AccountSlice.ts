@@ -15,6 +15,7 @@ const initialAccountState: TAccountState = {
 	balance: 0,
 	loan: 0,
 	loanPurpose: '',
+	isLoading: false
 };
 
 export default function reducer (
@@ -25,7 +26,8 @@ export default function reducer (
 		case AccountActionType.DEPOSIT:
 			return {
 				...state,
-				balance: state.balance + action.payload
+				balance: state.balance + action.payload,
+				isLoading: false,
 			};
 
 		case AccountActionType.WITHDRAW:
@@ -50,6 +52,12 @@ export default function reducer (
 				loan: 0,
 				loanPurpose: ''
 			};
+
+		case AccountActionType.CONVERT_CURRENCY:
+			return {
+				...state,
+				isLoading: true,
+			};
     
 		default:
 			return state;
@@ -64,8 +72,9 @@ export function deposit (
 	&from=${currency}
 	&to=${CurrencyValue.USD}`;
 
-	return async function(dispatch: Dispatch) 
-	{
+	return async function(dispatch: Dispatch) {
+		dispatch({ type: AccountActionType.CONVERT_CURRENCY });
+
 		if(currency === CurrencyValue.USD) {
 			dispatch(
 				{ 
