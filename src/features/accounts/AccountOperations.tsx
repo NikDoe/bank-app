@@ -1,24 +1,26 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deposit, payLoan, requestLoan, withdraw } from './AccountSlice';
 import { selectAccount } from './AccountSelector';
+import { CurrencyValue } from '../../types';
+import { AppDispatch } from '../../store';
 
 function AccountOperations() {
 	const [depositAmount, setDepositAmount] = useState<number>(0);
 	const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 	const [loanAmount, setLoanAmount] = useState<number>(0);
 	const [loanPurpose, setLoanPurpose] = useState('');
-	const [currency, setCurrency] = useState('USD');
+	const [currency, setCurrency] = useState(CurrencyValue.USD);
 
 	const { 
 		balance,
 		loan,
 		loanPurpose: purpose,
 	} = useSelector(selectAccount);
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	function handleDeposit() {
-		dispatch(deposit(depositAmount));
+		dispatch(deposit(depositAmount, currency));
 		setDepositAmount(0);
 	}
 
@@ -39,6 +41,14 @@ function AccountOperations() {
 		dispatch(payLoan());
 	}
 
+	const handleCurrencyChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		const selectedValue = event.target.value;
+
+		if (Object.values(CurrencyValue).includes(selectedValue as CurrencyValue)) {
+			setCurrency(selectedValue as CurrencyValue);
+		}
+	};
+
 	return (
 		<div>
 			<h2>Your account operations</h2>
@@ -52,11 +62,11 @@ function AccountOperations() {
 					/>
 					<select
 						value={currency}
-						onChange={(e) => setCurrency(e.target.value)}
+						onChange={handleCurrencyChange}
 					>
-						<option value='USD'>US Dollar</option>
-						<option value='EUR'>Euro</option>
-						<option value='GBP'>British Pound</option>
+						<option value={CurrencyValue.USD}>US Dollar</option>
+						<option value={CurrencyValue.EUR}>Euro</option>
+						<option value={CurrencyValue.GBP}>British Pound</option>
 					</select>
 
 					<button onClick={handleDeposit}>Deposit {depositAmount}</button>

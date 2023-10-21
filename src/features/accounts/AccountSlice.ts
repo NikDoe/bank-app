@@ -1,12 +1,14 @@
+import { Dispatch } from 'redux';
 import { 
 	AccountActionType, 
+	CurrencyValue, 
 	TAccountActions, 
-	TAccountDepositAction, 
 	TAccountPayLoanAction, 
 	TAccountRequestLoanAction, 
 	TAccountState, 
 	TAccountWithdrawAction 
 } from '../../types';
+
 
 const initialAccountState: TAccountState = {
 	balance: 0,
@@ -53,8 +55,35 @@ export default function reducer (
 	}
 }
 
-export function deposit (depositValue: number): TAccountDepositAction {
-	return { type: AccountActionType.DEPOSIT, payload: depositValue };
+export function deposit (
+	depositValue: number, 
+	currency: string
+) {
+	const queryString = `amount=${depositValue}
+	&from=${currency}
+	&to=${CurrencyValue.USD}`;
+
+	return async function(dispatch: Dispatch) 
+	{
+		if(currency === CurrencyValue.USD) {
+			dispatch(
+				{ 
+					type: AccountActionType.DEPOSIT, 
+					payload: depositValue
+				}
+			);
+		} else {
+			const response = await fetch(`https://api.frankfurter.app/latest?${queryString}`);
+			const data = await response.json();
+	
+			dispatch(
+				{ 
+					type: AccountActionType.DEPOSIT, 
+					payload: data.rates[CurrencyValue.USD] 
+				}
+			);
+		}
+	};
 }
 
 export function withdraw (withdrawValue: number): TAccountWithdrawAction {

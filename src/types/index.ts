@@ -1,3 +1,9 @@
+export enum CurrencyValue {
+    USD = 'USD',
+    EUR = 'EUR',
+    GBP = 'GBP',
+}
+
 export type TAccountState = {
     balance: number;
     loan: number;
