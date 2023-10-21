@@ -1,13 +1,37 @@
-export enum CurrencyValue {
-    USD = 'USD',
-    EUR = 'EUR',
-    GBP = 'GBP',
-}
+//STORE, THUNKS & DISPATCH
+import { AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type TAccountState = {
     balance: number;
     loan: number;
     loanPurpose: string;
+}
+
+export type TCustomerState = {
+    fullName: string;
+    nationalID: string;
+}
+
+export type RootState = {
+    accounts: TAccountState;
+    customers: TCustomerState;
+}
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  AnyAction
+>;
+
+export type AppDispatch = ThunkDispatch<RootState, undefined, AnyAction>;
+
+//ACCOUNTS TYPES
+export enum CurrencyValue {
+    USD = 'USD',
+    EUR = 'EUR',
+    GBP = 'GBP',
 }
 
 export enum AccountActionType {
@@ -48,11 +72,6 @@ TAccountRequestLoanAction |
 TAccountPayLoanAction
 
 //CUSTOMERS TYPES
-export type TCustomerState = {
-    fullName: string;
-    nationalID: string;
-}
-
 export enum CustomerActionType {
     CREATE = 'customer/createCustomer',
     UPDATE = 'customer/updateCustomer',

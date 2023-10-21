@@ -2,8 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deposit, payLoan, requestLoan, withdraw } from './AccountSlice';
 import { selectAccount } from './AccountSelector';
-import { CurrencyValue } from '../../types';
-import { AppDispatch } from '../../store';
+import { AppDispatch, CurrencyValue } from '../../types';
 
 function AccountOperations() {
 	const [depositAmount, setDepositAmount] = useState<number>(0);

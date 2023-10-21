@@ -2,21 +2,20 @@ import {
 	legacy_createStore as createStore,
 	combineReducers,
 	applyMiddleware,
-	AnyAction
+	Store,
+	Reducer
 } from 'redux';
 import accountReducer from './features/accounts/AccountSlice';
 import customerReduser from './features/customers/CustomerSlice';
-import thunk, { ThunkDispatch } from 'redux-thunk';
+import thunk from 'redux-thunk';
+import { RootState } from './types';
 
-const rootReducer = combineReducers({
+const rootReducer: Reducer<RootState> = combineReducers({
 	accounts: accountReducer,
 	customers: customerReduser,
 });
 
-export const store = createStore(
+export const store: Store<RootState> = createStore(
 	rootReducer,
 	applyMiddleware(thunk)
 );
-
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = ThunkDispatch<RootState, undefined, AnyAction>;

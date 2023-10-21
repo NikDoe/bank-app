@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { 
 	AccountActionType, 
+	AppThunk, 
 	CurrencyValue, 
 	TAccountActions, 
 	TAccountPayLoanAction, 
@@ -58,7 +59,7 @@ export default function reducer (
 export function deposit (
 	depositValue: number, 
 	currency: string
-) {
+): AppThunk {
 	const queryString = `amount=${depositValue}
 	&from=${currency}
 	&to=${CurrencyValue.USD}`;
