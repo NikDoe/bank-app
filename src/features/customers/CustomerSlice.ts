@@ -1,57 +1,29 @@
-import { 
-	CustomerActionType, 
-	TCreateCustomerAction, 
-	TCustomerActions, 
-	TCustomerState, 
-	TUpdateCustomerAction
-} from '../../types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TCustomerState } from '../../types';
 
-const initialCustomerState: TCustomerState = {
+const initialState: TCustomerState = {
 	fullName: '',
-	nationalID: ''
+	nationalId: '',
+	createdAd: ''
 };
 
-export default function reducer (
-	state = initialCustomerState,
-	action: TCustomerActions,
-): TCustomerState {
-	switch (action.type) {
-		case CustomerActionType.CREATE:
-		{
-			const { fullName, nationalID } = action.payload;
-			return {
-				...state,
-				fullName,
-				nationalID
-			};
+type CustomerPayload = Omit<TCustomerState, 'createdAd'>
+
+const customerSlice = createSlice({
+	name: 'customer',
+	initialState,
+	reducers: {
+		createCustomer(state, action: PayloadAction<CustomerPayload>) {
+			state.createdAd = new Date().toISOString();
+			state.fullName = action.payload.fullName;
+			state.nationalId = action.payload.nationalId;
+		},
+
+		updateName(state, action) {
+			state.fullName = action.payload;
 		}
-		case CustomerActionType.UPDATE:
-			return {
-				...state,
-				fullName: action.payload
-			};
-    
-		default:
-			return state;
 	}
-}
+});
 
-export function createCustomer (
-	fullName: string, 
-	nationalID: string
-): TCreateCustomerAction {
-	return {
-		type: CustomerActionType.CREATE,
-		payload: {
-			fullName,
-			nationalID
-		}
-	};
-}
-
-export function updateCustomer (updatedName: string): TUpdateCustomerAction {
-	return {
-		type: CustomerActionType.UPDATE,
-		payload: updatedName
-	};
-}
+export default customerSlice.reducer;
+export const { createCustomer, updateName } = customerSlice.actions;

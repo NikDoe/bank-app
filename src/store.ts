@@ -1,21 +1,12 @@
-import { 
-	legacy_createStore as createStore,
-	combineReducers,
-	applyMiddleware,
-	Store,
-	Reducer
-} from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import accountReducer from './features/accounts/AccountSlice';
-import customerReduser from './features/customers/CustomerSlice';
-import thunk from 'redux-thunk';
-import { RootState } from './types';
+import customerReducer from './features/customers/CustomerSlice';
 
-const rootReducer: Reducer<RootState> = combineReducers({
-	accounts: accountReducer,
-	customers: customerReduser,
+export const store = configureStore({
+	reducer: {
+		accounts: accountReducer,
+		customers: customerReducer
+	}
 });
 
-export const store: Store<RootState> = createStore(
-	rootReducer,
-	applyMiddleware(thunk)
-);
+export type RootState = ReturnType<typeof store.getState>;

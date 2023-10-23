@@ -1,118 +1,42 @@
-import { Dispatch } from 'redux';
-import { 
-	AccountActionType, 
-	AppThunk, 
-	CurrencyValue, 
-	TAccountActions, 
-	TAccountPayLoanAction, 
-	TAccountRequestLoanAction, 
-	TAccountState, 
-	TAccountWithdrawAction 
-} from '../../types';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { TAccountState } from '../../types';
 
-
-const initialAccountState: TAccountState = {
+const initialState: TAccountState = {
 	balance: 0,
 	loan: 0,
 	loanPurpose: '',
 	isLoading: false
 };
 
-export default function reducer (
-	state = initialAccountState,
-	action: TAccountActions,
-): TAccountState {
-	switch (action.type) {
-		case AccountActionType.DEPOSIT:
-			return {
-				...state,
-				balance: state.balance + action.payload,
-				isLoading: false,
-			};
-
-		case AccountActionType.WITHDRAW:
-			if(state.balance <= 0) return state;
-			return {
-				...state,
-				balance: state.balance - action.payload
-			};
-		case AccountActionType.REQUEST_LOAN:
-			if(state.loan > 0) return state;
-			return {
-				...state,
-				balance: state.balance + action.payload.ammount,
-				loan: action.payload.ammount,
-				loanPurpose: action.payload.loanPurpose
-			};
-
-		case AccountActionType.PAY_LOAN:
-			return {
-				...state,
-				balance: state.balance - state.loan,
-				loan: 0,
-				loanPurpose: ''
-			};
-
-		case AccountActionType.CONVERT_CURRENCY:
-			return {
-				...state,
-				isLoading: true,
-			};
-    
-		default:
-			return state;
-	}
+type DepositPayload = {
+	ammount: number;
+	loanPurpose: string;
 }
 
-export function deposit (
-	depositValue: number, 
-	currency: string
-): AppThunk {
-	const queryString = `amount=${depositValue}
-	&from=${currency}
-	&to=${CurrencyValue.USD}`;
+const accountSlice = createSlice({
+	name: 'account',
+	initialState,
+	reducers: {
+		deposit(state, action) {
+			state.balance += action.payload;
+		},
+		withdraw(state, action) {
+			state.balance -= action.payload;
+		},
+		requestLoan(state, action: PayloadAction<DepositPayload>) {
+			if(state.loan > 0) return;
 
-	return async function(dispatch: Dispatch) {
-		dispatch({ type: AccountActionType.CONVERT_CURRENCY });
-
-		if(currency === CurrencyValue.USD) {
-			dispatch(
-				{ 
-					type: AccountActionType.DEPOSIT, 
-					payload: depositValue
-				}
-			);
-		} else {
-			const response = await fetch(`https://api.frankfurter.app/latest?${queryString}`);
-			const data = await response.json();
-	
-			dispatch(
-				{ 
-					type: AccountActionType.DEPOSIT, 
-					payload: data.rates[CurrencyValue.USD] 
-				}
-			);
+			state.balance += action.payload.ammount;
+			state.loan = action.payload.ammount;
+			state.loanPurpose = action.payload.loanPurpose; 
+		},
+		payLoan(state) {
+			state.balance -= state.loan;
+			state.loan = 0;
+			state.loanPurpose = '';
 		}
-	};
-}
+	}
+});
 
-export function withdraw (withdrawValue: number): TAccountWithdrawAction {
-	return { type: AccountActionType.WITHDRAW, payload: withdrawValue };
-}
-
-export function requestLoan (
-	ammount: number, 
-	loanPurpose: string
-): TAccountRequestLoanAction {
-	return { 
-		type: AccountActionType.REQUEST_LOAN, 
-		payload: {
-			ammount,
-			loanPurpose
-		} 
-	};
-}
-
-export function payLoan (): TAccountPayLoanAction {
-	return { type: AccountActionType.PAY_LOAN };
-}
+export default accountSlice.reducer;
+export const { deposit, withdraw, payLoan, requestLoan } = accountSlice.actions;
